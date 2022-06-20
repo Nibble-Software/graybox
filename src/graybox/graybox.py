@@ -1,5 +1,5 @@
 import os
-import uuid
+from random import randrange
 
 from graybox.tools.get_file_separator import get_file_separator
 from graybox.tools.generate_solution_file import generate_solution_file
@@ -15,7 +15,7 @@ def evaluate_gray_box(solution, function_name, args, expected):
 
     separator = get_file_separator()
 
-    module_name = f'white_box_solution{str(uuid.uuid4()).replace("-","_")}'
+    module_name = f'white_box_solution_{randrange(100)}'
 
     package_name = 'graybox'
 
