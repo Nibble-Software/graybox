@@ -1,0 +1,58 @@
+name: CI/CD Development
+
+on:
+  push:
+    branches:
+      - 'development'
+env:
+  TEMP_LOCATION: /tmp
+  OS_NAME: LINUX
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.6", "3.7", "3.8", "3.9"]
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v3
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Install Graybox for testing
+        run: |
+          pip install .
+      - name: Test Project with Pytest
+        run: |
+          pytest
+  publish:
+    needs: test
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python
+      uses: actions/setup-python@v3
+      with:
+        python-version: '3.x'
+    - name: Install building package
+      run: |
+        python -m pip install --upgrade pip
+        pip install build
+    - name: Build package
+      run: |
+        python -m build
+    - name: Publish package on TestPypi
+      uses: pypa/gh-action-pypi-publish@27b31702a0e7fc50959f5ad993c78deac1bdfc29
+      with:
+        user: __token__
+        password: ${{ secrets.TESTPYPI_API_TOKEN }}
+        repository_url: https://test.pypi.org/legacy/
