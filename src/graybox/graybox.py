@@ -4,6 +4,7 @@ from random import randrange
 from graybox.tools.get_file_separator import get_file_separator
 from graybox.tools.generate_solution_file import generate_solution_file
 from graybox.exceptions.not_a_function_error import NotAFunctionError
+from graybox.tools.check_file_existence import check_file_existence
 
 status = ['PASSED', 'FAILED', 'EXECUTION_ERROR', 'FUNCTION_NOT_FOUND', 'NOT_A_FUNCTION']
 
@@ -15,7 +16,7 @@ def evaluate_gray_box(solution, function_name, args, expected):
 
     separator = get_file_separator()
 
-    module_name = f'white_box_solution_{randrange(100)}'
+    module_name = f'white_box_solution_{randrange(10000)}'
 
     package_name = 'graybox'
 
@@ -24,6 +25,8 @@ def evaluate_gray_box(solution, function_name, args, expected):
     solution_file_path = f'{path}{separator}{module_name}'
 
     generate_solution_file(solution_file_path, solution)
+
+    check_file_existence(f'{solution_file_path}.py')
 
     try:
         package = __import__(module_path, locals(), globals(), fromlist=[package_name])
