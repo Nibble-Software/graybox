@@ -15,7 +15,7 @@ def evaluate_gray_box(solution, function_name, args, expected):
 
     separator = get_file_separator()
 
-    module_name = f'white_box_solution{uuid.uuid4()}'
+    module_name = f'white_box_solution{str(uuid.uuid4()).replace("-","_")}'
 
     package_name = 'graybox'
 
