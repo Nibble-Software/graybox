@@ -1,6 +1,6 @@
-import os
-from random import randrange
-
+import sys
+import importlib.util
+import uuid
 from graybox.tools.get_file_separator import get_file_separator
 from graybox.tools.generate_solution_file import generate_solution_file
 from graybox.exceptions.not_a_function_error import NotAFunctionError
@@ -12,26 +12,20 @@ status = ['PASSED', 'FAILED', 'EXECUTION_ERROR', 'FUNCTION_NOT_FOUND', 'NOT_A_FU
 def evaluate_gray_box(solution, function_name, args, expected):
     result = ''
 
-    path = os.path.dirname(os.path.abspath(__file__))
+    name = generate_solution_file(solution)
 
-    separator = get_file_separator()
-
-    module_name = f'white_box_solution_{randrange(10000)}'
-
-    package_name = 'graybox'
-
-    module_path = f'{package_name}.{module_name}'
-
-    solution_file_path = f'{path}{separator}{module_name}'
-
-    generate_solution_file(solution_file_path, solution)
-
-    check_file_existence(f'{solution_file_path}.py')
+    module_name = f'graybox.solution.item_{uuid.uuid4()}'
 
     try:
-        package = __import__(module_path, locals(), globals(), fromlist=[package_name])
+        spec = importlib.util.spec_from_file_location(module_name, name)
 
-        function = getattr(package, function_name)
+        module = importlib.util.module_from_spec(spec)
+
+        sys.modules[module_name] = module
+
+        spec.loader.exec_module(module)
+
+        function = getattr(module, function_name)
 
         if not callable(function):
             raise NotAFunctionError(function_name)
@@ -45,15 +39,6 @@ def evaluate_gray_box(solution, function_name, args, expected):
             'expected': expected,
             'got': actual
         }
-
-    except ModuleNotFoundError as error3:
-        exist_file = os.path.exists(f'{solution_file_path}.py')
-
-        if exist_file:
-            print("File exist but it's not being imported")
-        else:
-            print("File does not exists")
-        raise error3
 
     except AttributeError as error2:
         return {
@@ -70,5 +55,3 @@ def evaluate_gray_box(solution, function_name, args, expected):
 
     except Exception as error:
         raise error
-    finally:
-        os.remove(f'{path}{separator}{module_name}.py')
