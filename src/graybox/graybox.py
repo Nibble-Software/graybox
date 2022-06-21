@@ -32,6 +32,10 @@ def evaluate_gray_box(solution, function_name, args, expected):
         package, imported = force_import(module_path, package_name)
 
         while not imported:
+            os.path.exists(f'{solution_file_path}.py')
+
+            print(f'{solution_file_path}.py')
+
             package, imported = force_import(module_path, package_name)
 
         function = getattr(package, function_name)
