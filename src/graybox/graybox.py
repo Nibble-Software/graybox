@@ -29,14 +29,7 @@ def evaluate_gray_box(solution, function_name, args, expected):
     check_file_existence(f'{solution_file_path}.py')
 
     try:
-        package, imported = force_import(module_path, package_name)
-
-        while not imported:
-            os.path.exists(f'{solution_file_path}.py')
-
-            print(f'{solution_file_path}.py')
-
-            package, imported = force_import(module_path, package_name)
+        package = __import__(module_path, locals(), globals(), fromlist=[package_name])
 
         function = getattr(package, function_name)
 
@@ -52,6 +45,15 @@ def evaluate_gray_box(solution, function_name, args, expected):
             'expected': expected,
             'got': actual
         }
+
+    except ModuleNotFoundError as error3:
+        exist_file = os.path.exists(f'{solution_file_path}.py')
+
+        if exist_file:
+            print("File exist but it's not being imported")
+        else:
+            print("File does not exists")
+        raise error3
 
     except AttributeError as error2:
         return {
@@ -70,11 +72,3 @@ def evaluate_gray_box(solution, function_name, args, expected):
         raise error
     finally:
         os.remove(f'{path}{separator}{module_name}.py')
-
-
-def force_import(module_path, package_name):
-    try:
-        package = __import__(module_path, locals(), globals(), fromlist=[package_name])
-        return package, True
-    except ModuleNotFoundError as error:
-        return None, False
