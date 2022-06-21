@@ -1,10 +1,10 @@
-import sys
 import importlib.util
+import os
+import sys
 import uuid
-from graybox.tools.get_file_separator import get_file_separator
-from graybox.tools.generate_solution_file import generate_solution_file
+
 from graybox.exceptions.not_a_function_error import NotAFunctionError
-from graybox.tools.check_file_existence import check_file_existence
+from graybox.tools.generate_solution_file import generate_solution_file
 
 status = ['PASSED', 'FAILED', 'EXECUTION_ERROR', 'FUNCTION_NOT_FOUND', 'NOT_A_FUNCTION']
 
@@ -55,3 +55,6 @@ def evaluate_gray_box(solution, function_name, args, expected):
 
     except Exception as error:
         raise error
+
+    finally:
+        os.remove(name)
