@@ -1,0 +1,12 @@
+Metadata-Version: 2.1
+Name: code-evaluator-gray-test
+Version: 0.0.1
+Summary: A graybox testing tool for testing functions
+Home-page: package url
+Author: Marcelo de Jesus Nuñez
+Author-email: chelo154@gmail.com
+Project-URL: Bug Tracker, package issues url
+Classifier: Programming Language :: Python :: 3
+Requires-Python: >=3.6
+Description-Content-Type: text/markdown
+License-File: LICENSE.txt

@@ -1,9 +1,9 @@
-name: CI/CD Development
+name: CI/CD Develop
 
 on:
   push:
     branches:
-      - 'development'
+      - 'develop'
 env:
   TEMP_LOCATION: /tmp
   OS_NAME: LINUX
