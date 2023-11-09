@@ -1,0 +1,16 @@
+LICENSE.txt
+MANIFEST.in
+README.txt
+pyproject.toml
+setup.cfg
+src/code_evaluator_gray_test.egg-info/PKG-INFO
+src/code_evaluator_gray_test.egg-info/SOURCES.txt
+src/code_evaluator_gray_test.egg-info/dependency_links.txt
+src/code_evaluator_gray_test.egg-info/top_level.txt
+src/graybox/__init__.py
+src/graybox/graybox.py
+src/graybox/exceptions/__init__.py
+src/graybox/exceptions/not_a_function_error.py
+src/graybox/tools/__init__.py
+src/graybox/tools/generate_solution_file.py
+src/graybox/tools/get_file_separator.py
